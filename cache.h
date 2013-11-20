@@ -17,6 +17,12 @@
 #define CACHE_PARAM_USIZE 2
 #define CACHE_PARAM_ASSOC 3
 
+/* cache line states */
+#define INVALID 0
+#define EXCLUSIVE 1
+#define MODIFIED 2
+#define SHARED 3
+
 /* structure definitions */
 typedef struct cache_line_ {
   unsigned tag;
@@ -57,7 +63,7 @@ void delete();
 void insert();
 void dump_settings();
 void print_stats();
-
+int remote_cache_match(unsigned index, unsigned tag, unsigned pid, unsigned access_type, Pcache mesi_cache);
 
 /* macros */
 #define LOG2(x) ((int)( log((double)(x)) / log(2) ))
