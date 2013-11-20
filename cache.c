@@ -81,6 +81,7 @@ void perform_access(addr, access_type, pid)
   /* handle accesses to the mesi caches */
 	unsigned int index = (addr & mesi_cache[pid].index_mask) >> mesi_cache[pid].index_mask_offset;
 	unsigned tag = addr >> (LOG2(mesi_cache[pid].n_sets) + LOG2(cache_block_size));
+	//printf("pid = %d, access_type = %d, index = %d, tag = %d\n", pid, access_type, index, tag);
 
 	if(mesi_cache[pid].LRU_head[index] == NULL) {
 		//compulsory miss (empty cache set)
@@ -120,6 +121,7 @@ void perform_access(addr, access_type, pid)
 				
 				if(access_type == TRACE_STORE) {
 					//write hit
+					remote_cache_match(index, tag, pid, access_type, mesi_cache);
 					if(current_line->state == EXCLUSIVE) {
 						current_line->state = MODIFIED;
 					}
